@@ -1,8 +1,9 @@
 package com.home.tests;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.support.PageFactory;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
+
+import org.testng.annotations.Test;
 
 import com.home.core.BaseTest;
 import com.home.pages.GoogleSearchPage;
@@ -11,20 +12,44 @@ import com.home.pages.GoogleSearchResultPage;
 public class Script001 extends BaseTest {
 
 	@Test
-	public void testSearch() throws Exception {
+	public void test001() throws Exception {
 		
+		stepInfo("Opening google search");
 		open("http://www.google.com/?hl=en");
 		
-		Assert.assertEquals("Title not correct", "Google", driver.getTitle());
+		GoogleSearchPage searchPage = page(GoogleSearchPage.class);
 		
-		GoogleSearchPage searchPage = PageFactory.initElements(driver, GoogleSearchPage.class);
+		stepInfo("Checking page title");
+		searchPage.checkTitle("Google");
 	   
-		searchPage.searchFor("Cookies");
+		stepInfo("Performing search");
+		GoogleSearchResultPage searchResultPage = searchPage.searchFor("Cookies");
 		
-		GoogleSearchResultPage searchResultPage = new GoogleSearchResultPage(driver);
+		searchResultPage.resultsHeader.shouldNotBe(visible);
 		
-		searchResultPage.verifySearchResult(3, "Cookie Recipes - Allrecipes.com");
+		stepInfo("Checking result");
+		searchResultPage.verifySRLinkText(1, "HTTP cookie - Wikipedia, the free encyclopedia");
 	        
 	}
-
+	
+	@Test
+	public void test002() throws Exception {
+		
+		stepInfo("Opening google search");
+		open("http://www.google.com/?hl=en");
+		
+		GoogleSearchPage searchPage = page(GoogleSearchPage.class);
+		
+		stepInfo("Checking page title");
+		searchPage.checkTitle("Google");
+	   
+		stepInfo("Performing search");
+		GoogleSearchResultPage searchResultPage = searchPage.searchFor("Sweets");
+		
+		searchResultPage.resultsHeader.shouldNotBe(visible);
+		
+		stepInfo("Checking result");
+		searchResultPage.verifySRLinkText(1, "HTTP cookie - Wikipedia, the free encyclopedia");
+	        
+	}
 }

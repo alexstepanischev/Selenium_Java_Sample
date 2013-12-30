@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="First Suite" verbose="3">
+	<test name="Smoke tests" parallel="methods" thread-count="2">
+	    <packages>
+	        <package name="com.home.tests"/>
+	    </packages>
+	</test>
+</suite>

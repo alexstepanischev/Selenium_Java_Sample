@@ -1,35 +1,23 @@
 package com.home.core;
 
-import org.junit.After;
-import org.junit.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import com.codeborne.selenide.testng.ScreenShooter;
 
-public class BaseTest {
-	
-	protected WebDriver driver;
-	
-	@Before
-	public void setUp() {
-		driver = new FirefoxDriver();
-	}
+import org.testng.Reporter;
+import org.testng.annotations.Listeners;
 
-	@After
-	public void tearDown() {
-		if (driver == null) {
-			return;
-		}
-		else {
-			driver.quit();
-			driver = null;
-		}
-	}
-	
+@Listeners({ ScreenShooter.class, BaseTestListener.class })
+public abstract class BaseTest {
+
 	/**
-	 * Opens defined URL in browser
-	 * @param url - target page URL
+	 * Reports and logs step information message
+	 * @param message - text of step information message
 	 */
-	protected void open(String url) {
-		driver.get(url);
+	protected static void stepInfo(String message) {
+		StackTraceElement stackElement = Thread.currentThread().getStackTrace()[2];
+		String className = Util.getClassNameFromFullName(stackElement.getClassName());
+
+		Reporter.log(String.format("%s.%s - %s <br/>", className, stackElement.getMethodName(), message));
 	}
+
+	
 }

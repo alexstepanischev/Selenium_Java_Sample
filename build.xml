@@ -1,0 +1,58 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Google_Test" default="run" basedir=".">
+
+ <property name="src.dir" value="src" />
+ <property name="build.dir" value="build" />
+ <property name="classes.dir" value="${build.dir}/bin" />
+ <property name="report.dir" value="${build.dir}/reports" />
+ <property name="logs.dir" value="${build.dir}/logs" />
+
+ <path id="libs">
+  <fileset dir="lib">
+   <include name="*.jar"/>
+  </fileset>
+  <pathelement path="${basedir}\${classes.dir}"/>
+ </path>
+
+ <!-- target name="run">
+  <antcall target="clean"/>
+  <antcall target="resolve"/>	
+  <antcall target="compile"/>
+  <antcall target="runTests"/>
+ </target -->
+ 
+ <!-- Delete old data and create new directories -->
+ <target name="clean" >
+  <echo>Initializing...</echo>
+  <delete dir="${build.dir}" />
+  <mkdir dir="${classes.dir}"/>
+  <mkdir dir="${report.dir}"/>
+  <mkdir dir="${logs.dir}"/>
+ </target>
+	
+ <!-- Resolving dependencies with Ivy -->
+ <target name="resolve" depends="clean" description="retrieve dependencies with ivy">
+   	<ivy:retrieve />
+ 	<ivy:cachepath pathid="compile.path" conf="compile"/>
+ </target>
+
+ <!-- Complies the java files -->
+ <target name="compile" depends="resolve">
+  <echo>Compiling...</echo>
+  <javac includeantruntime="false" debug="true" srcdir="${src.dir}" destdir="${classes.dir}"  classpathref="compile.path" />
+ </target>
+
+ <!-- Runs the file and generates ReportNG report -->
+ <target name="run" description="Running tests" depends="compile">
+  <echo>Running Tests...</echo>
+  <taskdef resource="testngtasks" classpathref="compile.path"/>
+  <testng outputDir="${report.dir}"
+    haltonfailure="true"
+    useDefaultListeners="false"
+    listeners="org.uncommons.reportng.HTMLReporter"
+    classpathref="compile.path" classpath="${classes.dir}">
+  	<sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+  	<xmlfileset dir="${basedir}" includes="testng.xml" />
+  </testng>
+ </target>
+
+</project>

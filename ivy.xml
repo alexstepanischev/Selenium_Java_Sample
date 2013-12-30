@@ -1,0 +1,13 @@
+<ivy-module version="2.0">
+    <info organisation="com.home" module="tests"/>
+    <configurations defaultconfmapping="compile->default">
+ 		<conf name="compile" description="Required to compile application"/>
+ 	</configurations>
+	<dependencies>
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" rev="2.39.0"/>
+		<dependency org="org.uncommons" name="reportng" rev="1.1.4"/>
+		<dependency org="com.codeborne" name="selenide" rev="2.6.2"/>
+		<dependency org="com.google.inject" name="guice" rev="3.0"/>
+		<dependency org="org.testng" name="testng" rev="6.8.7"/>
+	</dependencies>
+</ivy-module>

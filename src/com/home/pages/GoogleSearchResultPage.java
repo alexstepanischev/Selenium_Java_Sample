@@ -1,29 +1,27 @@
 package com.home.pages;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.CacheLookup;
+import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.*;
+import com.codeborne.selenide.SelenideElement;
 import com.home.core.BasePage;
 
 public class GoogleSearchResultPage extends BasePage{
-	
-	private final WebDriver driver;
-
-	public GoogleSearchResultPage(WebDriver driver) {
-	    this.driver = driver;
-	    
-	    // Waits for page load and checks that we are on the right page.
-	    Assert.assertEquals("This is not the search result page", "Search Results", waitForElement(By.xpath("//div[@id='search']/h2"), driver).getText());	   
-	}
-	
+    @FindBy(css = "#search h2")
+    @CacheLookup //Use for really static elements
+    public SelenideElement resultsHeader;
+    
 	/**
 	 * Checking if defined link present on defined search result position
 	 * @param position - position in search results from top of the page
 	 * @param linkText - text of target link
 	 */
-	public void verifySearchResult(int position, String linkText) {			
-		Assert.assertEquals("Search result link not matched", linkText, driver.findElement(By.xpath("//ol[@id='rso']/li[" + position + "]//h3/a")).getText());		   
+	public void verifySRLinkText(int position, String linkText) {						
+		String xpath = String.format("//ol[@id='rso']/li[%s]//h3/a", position);	
+		$(By.xpath(xpath)).shouldHave(text(linkText));
 	}
 
 }

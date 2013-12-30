@@ -2,21 +2,24 @@ package com.home.pages;
 
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.How;
 
-public class GoogleSearchPage {
-    @FindBy(how = How.NAME, using = "q")
+import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Selenide.*;
+
+import com.home.core.BasePage;
+
+public class GoogleSearchPage extends BasePage {
+    @FindBy(name = "q")
     @CacheLookup //Use for really static elements
-    private WebElement searchBox;
+    private SelenideElement searchBox;
     
 	/**
 	 * Performs search by defined query
 	 * @param query - search query
 	 */
-    public void searchFor(String query) {
-        searchBox.sendKeys(query);
-        searchBox.submit();
-    }
-    
+    public GoogleSearchResultPage searchFor(String query) { 	
+        searchBox.setValue(query);
+        searchBox.pressEnter();
+        return page(GoogleSearchResultPage.class);    
+    }    
 } 
