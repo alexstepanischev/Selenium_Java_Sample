@@ -1,7 +1,6 @@
 package com.home.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -11,7 +10,6 @@ import com.home.core.BasePage;
 
 public class GoogleSearchResultPage extends BasePage{
     @FindBy(css = "#search h2")
-    @CacheLookup //Use for really static elements
     public SelenideElement resultsHeader;
     
 	/**

@@ -2,13 +2,16 @@ package com.home.tests;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import com.codeborne.selenide.testng.BrowserPerTest;
 
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.home.core.BaseTest;
 import com.home.pages.GoogleSearchPage;
 import com.home.pages.GoogleSearchResultPage;
 
+@Listeners({BrowserPerTest.class})
 public class Script001 extends BaseTest {
 
 	@Test
