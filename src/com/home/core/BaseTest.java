@@ -14,10 +14,11 @@ public abstract class BaseTest {
 	 */
 	protected static void stepInfo(String message) {
 		StackTraceElement stackElement = Thread.currentThread().getStackTrace()[2];
-		String className = Util.getClassNameFromFullName(stackElement.getClassName());
 		
-		Reporter.log(String.format("%s.%s - %s <br/>", className, stackElement.getMethodName(), message));
-		Util.log.info(String.format("%s.%s - %s", className, stackElement.getMethodName(), message));
+		String logMessage = Util.formatLogMessage(stackElement, message);
+		
+		Reporter.log(String.format("%s<br/>", logMessage));
+		Util.log.info(logMessage);
 	}
 	
 }
