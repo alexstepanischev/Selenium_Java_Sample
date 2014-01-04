@@ -1,4 +1,4 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Google_Test" default="run" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Selenium_Java_Sample" default="run" basedir=".">
 
  <property name="src.dir" value="src" />
  <property name="build.dir" value="build" />
@@ -37,7 +37,7 @@
     listeners="org.uncommons.reportng.HTMLReporter"
     classpathref="compile.path" classpath="${classes.dir}">
   	<sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
-  	<sysproperty key="log4j.configurationFile" value="log4j2.xml"/> 	
+  	<sysproperty key="log4j.configurationFile" value="resources/log4j2.xml"/> 	
   	<xmlfileset dir="${basedir}" includes="testng.xml" />
   </testng>
  </target>
