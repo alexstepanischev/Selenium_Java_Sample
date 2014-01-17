@@ -21,6 +21,8 @@ public class Script004 extends BaseTest {
 		stepInfo("Filling out form");
 		
 		loginPage.loginForm.emailInput.sendKeys("test");
+		loginPage.loginForm.passwordInput.sendKeys("test");
+		loginPage.loginForm.buttonSubmit.click();
 		loginPage.loginForm.emailInput.clear();
 		
 		

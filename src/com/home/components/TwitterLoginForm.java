@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 
 import ru.yandex.qatools.htmlelements.annotations.Block;
 import ru.yandex.qatools.htmlelements.annotations.Name;
+import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 @Name("Twitter Login Form")
@@ -16,7 +17,12 @@ public class TwitterLoginForm extends HtmlElement {
 	@FindBy(id = "signin-email")
 	public SelenideElement emailInput;
 	
-	@FindBy()
+	@FindBy(id = "signin-password")
 	public WebElement passwordInput;
+	
+	@FindBy(css = ".submit")
+	public Button buttonSubmit;
+	
+	
 	
 }
