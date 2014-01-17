@@ -4,7 +4,7 @@ import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 
 import com.codeborne.selenide.SelenideElement;
-import static com.codeborne.selenide.Selenide.*;
+import static com.home.connector.SelenideHtmlElement.*;
 
 import com.home.core.BasePage;
 
@@ -20,6 +20,6 @@ public class GoogleSearchPage extends BasePage {
     public GoogleSearchResultPage searchFor(String query) { 	
         searchBox.setValue(query);
         searchBox.pressEnter();
-        return page(GoogleSearchResultPage.class);    
+        return newPage(GoogleSearchResultPage.class);        
     }    
 } 

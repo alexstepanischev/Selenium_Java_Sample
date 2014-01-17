@@ -11,5 +11,6 @@
 		<dependency org="org.testng" name="testng" rev="6.8.7"/>
 		<dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.0-beta9" />
   		<dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.0-beta9" />
+  		<dependency org="ru.yandex.qatools.htmlelements" name="htmlelements-java" rev="1.11" />
 	</dependencies>
 </ivy-module>
