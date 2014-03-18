@@ -12,7 +12,7 @@ import com.home.pages.GoogleSearchPage;
 import com.home.pages.GoogleSearchResultPage;
 
 @Listeners({BrowserPerTest.class})
-public class Script001 extends BaseTest {
+public class GoogleTests extends BaseTest {
 
 	@Test
 	public void test001() throws Exception {

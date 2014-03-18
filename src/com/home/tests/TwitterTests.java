@@ -4,37 +4,46 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.home.connector.SelenideHtmlElement.newPage;
 
+import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.codeborne.selenide.testng.BrowserPerTest;
 import com.home.core.BaseTest;
-import com.home.pages.GoogleSearchPage;
-import com.home.pages.GoogleSearchResultPage;
+import com.home.pages.TwitterLoginPage;
 
-public class Script003 extends BaseTest {
+@Listeners({BrowserPerTest.class})
+public class TwitterTests extends BaseTest {
 	
+	//Testing SelenideCheckBox
 	@Test
-	public void test005() throws Exception {
+	public void testCheckBox() throws Exception {
 		
-		stepInfo("Opening google search");
-		open("http://www.google.com/?hl=en");
+		stepInfo("Opening twitter login");
+		open("http://www.twitter.com");
 		
-		GoogleSearchPage searchPage = newPage(GoogleSearchPage.class);
+		TwitterLoginPage loginPage = newPage(TwitterLoginPage.class);
 		
-		stepInfo("Checking page title");
-		searchPage.checkTitle("Google");
-	   
-		stepInfo("Performing search");
-		GoogleSearchResultPage searchResultPage = searchPage.searchFor("Cookies");
+		stepInfo("Filling out form");
 		
-		searchResultPage.resultsHeader.shouldNotBe(visible);
+		loginPage.loginForm.emailInput.sendKeys("test");
+		loginPage.loginForm.passwordInput.sendKeys("test");
+
+		loginPage.loginForm.buttonSubmit.getSelf().shouldBe(visible);
 		
-		stepInfo("Second search attempt");
-		searchResultPage.googleHeader.requestInput.clear();
-		searchResultPage.googleHeader.search("test");
+		loginPage.loginForm.allFormInputs.get(1).clear();
+
+		Assert.assertEquals(loginPage.loginForm.rememberMeCheckBox.isSelected(), true, "Wrong value");
+		loginPage.loginForm.rememberMeCheckBox.deselect();
+		Assert.assertEquals(loginPage.loginForm.rememberMeCheckBox.isSelected(), false, "Wrong value");
+		loginPage.loginForm.rememberMeCheckBox.select();
+		Assert.assertEquals(loginPage.loginForm.rememberMeCheckBox.isSelected(), true, "Wrong value");
+		loginPage.loginForm.rememberMeCheckBox.set(false);
+		Assert.assertEquals(loginPage.loginForm.rememberMeCheckBox.isSelected(), false, "Wrong value");
+		loginPage.loginForm.rememberMeCheckBox.set(true);
+		Assert.assertEquals(loginPage.loginForm.rememberMeCheckBox.isSelected(), true, "Wrong value");
 		
-		stepInfo("Checking result");
-		searchResultPage.verifySRLinkText(2, "Cookie Recipes - Allrecipes.com");	
-		
+		loginPage.loginForm.buttonSubmit.click();
 	}
 
 }

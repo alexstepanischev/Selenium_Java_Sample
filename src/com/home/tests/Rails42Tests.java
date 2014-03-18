@@ -1,31 +1,54 @@
 package com.home.tests;
 
-import static com.codeborne.selenide.Selenide.open;
-import static com.home.connector.SelenideHtmlElement.newPage;
-
+import org.openqa.selenium.By;
+import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import com.home.core.BaseTest;
-import com.home.pages.TwitterLoginPage;
+import static com.codeborne.selenide.Selenide.$;
 
-public class Script004 extends BaseTest {
-	
+import com.codeborne.selenide.testng.BrowserPerTest;
+import com.home.core.BaseTest;
+import com.home.pages.Rails42Home;
+import com.home.pages.Rails42Login;
+
+@Listeners({BrowserPerTest.class})
+public class Rails42Tests extends BaseTest {
+
+	//Using SelenideTextInput and SelenideButton
 	@Test
-	public void test006() throws Exception {
+	public void testInputsAndButton() throws Exception {
+		Rails42Login loginPage = Rails42Login.openPage();
 		
-		stepInfo("Opening twitter login");
-		open("http://www.twitter.com");
+		loginPage.login.sendKeys("test");
+		Assert.assertEquals(loginPage.login.getText(), "test", "Wrong value");
 		
-		TwitterLoginPage loginPage = newPage(TwitterLoginPage.class);
+		loginPage.login.clear();
+		Assert.assertEquals(loginPage.login.getSelf().getText(), "", "Wrong value");
 		
-		stepInfo("Filling out form");
+		loginPage.login.getSelf().sendKeys("test");
+		Assert.assertEquals(loginPage.login.getText(), "test", "Wrong value");
 		
-		loginPage.loginForm.emailInput.sendKeys("test");
-		loginPage.loginForm.passwordInput.sendKeys("test");
-		loginPage.loginForm.buttonSubmit.click();
-		loginPage.loginForm.emailInput.clear();
+		loginPage.login.getSelf().clear();
+		Assert.assertEquals(loginPage.login.getText(), "", "Wrong value");
 		
+		loginPage.login.sendKeys("admin@example.com");
+		loginPage.password.sendKeys("admin123");
+		loginPage.signin.click();		
 		
 	}
-
+	
+	//Testing SelenideLink
+	@Test
+	public void testLink() throws Exception {
+		Rails42Login loginPage = Rails42Login.openPage();
+		Rails42Home homePage = loginPage.login();
+		Assert.assertEquals(homePage.sidebarMenu.booksLink.getText(), "Books", "Wrong value");
+		Assert.assertEquals(homePage.sidebarMenu.booksLink.getReference(), "http://rails42sample.herokuapp.com/books", "Wrong value");
+		homePage.sidebarMenu.booksLink.click();
+		$(By.linkText("Add Book")).click();	
+	}
+	
+	
+	
 }
