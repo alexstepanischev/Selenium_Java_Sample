@@ -1,8 +1,11 @@
 package com.home.connector;
 
 import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.getElementName;
+import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.getGenericParameterClass;
 import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.isHtmlElement;
+import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.isHtmlElementList;
 import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.isTypifiedElement;
+import static ru.yandex.qatools.htmlelements.utils.HtmlElementUtils.isTypifiedElementList;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -61,7 +64,15 @@ public class SelenideHtmlElementDecorator extends DefaultFieldDecorator {
             return decorateHtmlElement(htmlElementClass, loader, locator, elementName);
         } else if (WebElement.class.isAssignableFrom(field.getType())) {
 	      return WaitingSelenideElement.wrap(searchContext, selector, 0);
-	    } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+	    } else if (isTypifiedElementList(field)) {
+            @SuppressWarnings("unchecked")
+            Class<TypifiedElement> typifiedElementClass = (Class<TypifiedElement>) getGenericParameterClass(field);
+            return decorateTypifiedElementList(typifiedElementClass, loader, locator, elementName);
+        } else if (isHtmlElementList(field)) {
+            @SuppressWarnings("unchecked")
+            Class<HtmlElement> htmlElementClass = (Class<HtmlElement>) getGenericParameterClass(field);
+            return decorateHtmlElementList(htmlElementClass, loader, locator, elementName);
+        } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
 	      return createElementsContainer(selector, field);
 	    } else if (isDecoratableList(field, ElementsContainer.class)) {
 	      return createElementsContainerList(field, selector);
@@ -139,6 +150,16 @@ public class SelenideHtmlElementDecorator extends DefaultFieldDecorator {
 		// Recursively initialize elements of the block
 		PageFactory.initElements(new SelenideHtmlElementDecorator(elementToWrap), htmlElementInstance);
 		return htmlElementInstance;
+	  }
+	  
+	  private <T extends TypifiedElement> List<T> decorateTypifiedElementList(Class<T> elementClass, ClassLoader loader,
+              ElementLocator locator, String listName) {
+		return HtmlElementFactory.createNamedProxyForTypifiedElementList(elementClass, loader, locator, listName);
+	  }
+
+	  private <T extends HtmlElement> List<T> decorateHtmlElementList(Class<T> elementClass, ClassLoader loader,
+	      ElementLocator locator, String listName) {
+		  return HtmlElementFactory.createNamedProxyForHtmlElementList(elementClass, loader, locator, listName);
 	  }
 
 }
