@@ -25,11 +25,15 @@ public class Rails42Login extends BasePage {
 		return newPage(Rails42Login.class);
 	}
 	
+	public Rails42Home submit() {
+		signin.click();
+		return newPage(Rails42Home.class);
+	}
+	
 	public Rails42Home login() {
 		login.sendKeys("admin@example.com");
 		password.sendKeys("admin123");
-		signin.click();
-		return newPage(Rails42Home.class);
+		return submit();
 	}
 	
 }

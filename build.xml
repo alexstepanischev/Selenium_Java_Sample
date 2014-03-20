@@ -1,45 +1,75 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Selenium_Java_Sample" default="run" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Selenium_Java_Sample" default="runcukes" basedir=".">
 
- <property name="src.dir" value="src" />
- <property name="build.dir" value="build" />
- <property name="classes.dir" value="${build.dir}/bin" />
- <property name="report.dir" value="${build.dir}/reports" />
- <property name="logs.dir" value="${build.dir}/logs" />
- 
- <!-- Delete old data and create new directories -->
- <target name="clean" >
-  <echo>Initializing...</echo>
-  <delete dir="${build.dir}" />
-  <mkdir dir="${classes.dir}"/>
-  <mkdir dir="${report.dir}"/>
-  <mkdir dir="${logs.dir}"/>
- </target>
-	
- <!-- Resolving dependencies with Ivy -->
- <target name="resolve" depends="clean" description="retrieve dependencies with ivy">
-   	<ivy:retrieve />
- 	<ivy:cachepath pathid="compile.path" conf="compile"/>
- </target>
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/bin" />
+	<property name="report.dir" value="${build.dir}/reports" />
+	<property name="logs.dir" value="${build.dir}/logs" />
 
- <!-- Complies the java files -->
- <target name="compile" depends="resolve">
-  <echo>Compiling...</echo>
-  <javac includeantruntime="false" debug="true" srcdir="${src.dir}" destdir="${classes.dir}"  classpathref="compile.path"/>
- </target>
+	<!-- Delete old data and create new directories -->
+	<target name="clean" >
+		<echo>Initializing...</echo>
+		<delete dir="${build.dir}" />
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${logs.dir}"/>
+	</target>
 
- <!-- Runs the file and generates ReportNG report -->
- <target name="run" description="Running tests" depends="compile">
-  <echo>Running Tests...</echo>
-  <taskdef resource="testngtasks" classpathref="compile.path"/>
-  <testng outputDir="${report.dir}"
-    haltonfailure="true"
-    useDefaultListeners="false"
-    listeners="org.uncommons.reportng.HTMLReporter"
-    classpathref="compile.path" classpath="${classes.dir}">
-  	<sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
-  	<sysproperty key="log4j.configurationFile" value="resources/log4j2.xml"/> 	
-  	<xmlfileset dir="${basedir}" includes="testng.xml" />
-  </testng>
- </target>
+	<!-- Resolving dependencies with Ivy -->
+	<target name="resolve" depends="clean" description="retrieve dependencies with ivy">
+		<ivy:retrieve />
+		<ivy:cachepath pathid="compile.path" conf="compile"/>
+	</target>
+
+	<!-- Complies the java files -->
+	<target name="compile" depends="resolve">
+		<echo>Compiling...</echo>
+		<javac includeantruntime="false" debug="true" srcdir="${src.dir}" destdir="${classes.dir}"  classpathref="compile.path"/>
+	</target>
+
+	<path id="classpath">
+		<pathelement location="${classes.dir}" />
+		<path refid="compile.path" />
+	</path>
+
+	<!-- Runs the file and generates ReportNG report -->
+	<target name="run" description="Running tests" depends="compile">
+		<echo>Running Tests...</echo>
+		<taskdef resource="testngtasks" classpathref="classpath"/>
+		<testng outputDir="${report.dir}"
+		    haltonfailure="false"
+		    useDefaultListeners="false"
+		    listeners="org.uncommons.reportng.HTMLReporter"
+		    classpathref="compile.path" classpath="${classes.dir}">
+			<sysproperty key="org.uncommons.reportng.escape-output" value="false"/>
+			<sysproperty key="log4j.configurationFile" value="resources/log4j2.xml"/>
+			<xmlfileset dir="${basedir}" includes="testng.xml" />
+		</testng>
+	</target>
+
+	<target name="runcukes" depends="run">
+		<mkdir dir="${report.dir}/cucumber"/>
+		<echo>Running cukes...</echo>
+		<java classname="cucumber.api.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus">
+			<classpath refid="classpath"/>
+			<arg value="--format"/>
+			<arg value="json:${report.dir}/cucumber/cucumber.json"/>
+			<arg value="--format"/>
+			<arg value="pretty"/>
+			<arg value="--format"/>
+			<arg value="html:${report.dir}/cucumber/html"/>
+			<arg value="--glue"/>
+			<arg value="com.home.cucumber.stepdefs"/>
+			<arg value="features"/>
+		</java>
+
+		<fail message="Cucumber failed">
+			<condition>
+				<not>
+					<equals arg1="${cucumber.exitstatus}" arg2="0"/>
+				</not>
+			</condition>
+		</fail>
+	</target>
 
 </project>

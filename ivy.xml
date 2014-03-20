@@ -12,5 +12,12 @@
 		<dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.0-beta9" />
   		<dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.0-beta9" />
   		<dependency org="ru.yandex.qatools.htmlelements" name="htmlelements-java" rev="1.11" />
+  		<dependency org="info.cukes" name="cucumber-jvm" rev="1.1.5" />
+  		<dependency org="info.cukes" name="cucumber-java" rev="1.1.5" />
+  		<dependency org="info.cukes" name="cucumber-jvm-deps" rev="1.0.3" />
+  		<dependency org="info.cukes" name="cucumber-html" rev="0.2.3" />
+  		<dependency org="info.cukes" name="cucumber-junit" rev="1.1.5" />
+  		<dependency org="info.cukes" name="gherkin" rev="2.12.2" />
+  		<dependency org="com.rubiconproject.oss" name="jchronic" rev="0.2.6"/>
 	</dependencies>
 </ivy-module>
