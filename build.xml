@@ -61,6 +61,7 @@
 			<arg value="--glue"/>
 			<arg value="com.home.cucumber.stepdefs"/>
 			<arg value="features"/>
+			<arg value="--monochrome"/>
 		</java>
 
 		<fail message="Cucumber failed">
